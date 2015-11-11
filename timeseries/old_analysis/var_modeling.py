@@ -1,0 +1,24 @@
+import numpy as np
+from scipy import stats
+import pandas as pd
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+from statsmodels.graphics.api import qqplot
+
+dta = pd.DataFrame({"a":np.random.randn(50),"b":np.random.randn(50)})
+dta.index = pd.Index(sm.tsa.datetools.dates_from_range("1950","1999"))
+dta.plot(figsize=(12,8))
+
+var_mod = sm.tsa.VAR(dta)
+#print help(var_mod.predict)
+
+results = var_mod.fit(2)
+
+#result = var_mod.predict(dta,start="1990",end="2010")
+irf = results.irf(10)
+irf.plot()
+plt.show()
+# ax = dta.ix['1950':].plot(figsize(12,8))
+# ax = prediction.plot(ax=ax, style="r--",label="Dynamic Prediction")
+# ax.legend()
+# plt.show()

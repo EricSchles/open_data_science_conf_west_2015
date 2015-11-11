@@ -1,0 +1,92 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/font-awesome.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+        <title>WebScraper</title>
+    </head>
+    <body>
+        <a href="/static/img/joke.jpg"><img class="center-block" height="250px" width="auto" src="/static/img/alligator.jpg"></a>
+
+<!--
+<form method="post" action="{{url_for('investigator')}}">
+    <table >
+        <tr>
+            <td><label>Enter a location, zip code to scrape</label></td>
+        </tr>
+        <tr>   
+            <td> <input type="text" name="place"></input></td>
+
+        </tr>
+        <tr>
+            <td><input type="radio" name="case_number" value="anonymous">Anonymous</input>
+            <input type="radio" name="case_number" value="not_anonymous">For a case</input>
+            </td>
+
+        <tr>
+            <td> <input type="submit" value="Start Scraping"></td>
+        </tr>
+    </table>
+</form>
+-->
+
+<style>
+.center_div{
+    margin: 0 auto;
+    width:30%
+}
+table tr td:empty {
+    width: 50px;
+}
+
+.top_row{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 20px;
+    padding-left: 20px;   
+}
+
+</style>
+
+<div class="container center_div">
+<table>
+<tr><td>
+<form role="form" method="post" action="{{url_for('investigator')}}">
+    <div>
+      <label for="place">Enter A Location To Scrape:</label>
+      <input type="text" class="form-control" id="place" placeholder="New York" name="place">
+    </div>
+    </td>
+    <td style="padding-left: 35px;">
+    <div>
+      <label for="place">Enter A Case Number:</label>
+      <input type="text" class="form-control" id="place" placeholder="111111" name="case_number">
+    </div>
+    </td>
+    </td></tr>
+    <tr style="padding-top:20px;"><td style="padding-top:20px;">
+    <button type="submit" class="btn btn-success">Start Scraping</button>
+    </td>
+</form>
+<td style="padding-top:20px;padding-left:35px;">
+<!-- add id field to specify which investigation to stop -->
+<form method="post" action="{{url_for('stop_investigation')}}">
+    <button type="submit" class="btn btn-danger">Stop Scraping</button>
+</form>
+
+</td></tr>
+</table>
+<br />
+<form method="post" action="{{url_for('run')}}">
+    <button type="submit" class="btn btn-info">Test out the scraper</button>
+</form>
+
+<h3><a href="/add">Add some data</a></h3>
+</div>
+
+<script src="{{url_for('static',filename='js/jquery.js')}}"></script>
+
+</body>
+</html>

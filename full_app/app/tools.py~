@@ -1,0 +1,127 @@
+#This file will have a set of classes used throughout the program
+
+#Imports for ParsePhoneNumber
+import json
+import pickle
+
+#Imports for ParseAddress
+import usaddress
+from streetaddress import StreetAddressFormatter
+from nltk.tag.stanford import StanfordNERTagger as Tagger
+
+tagger = Tagger('/opt/stanford-ner-2014-08-27/classifiers/english.all.3class.distsim.crf.ser.gz','/opt/stanford-ner-2014-08-27/stanford-ner.jar')
+
+
+#Consider having a generalized parse method for each of these objects
+class ParsePhoneNumber:
+        
+    #text is a string
+    def _letter_to_number(self,text):
+        text= text.upper()
+        text = text.replace("ONE","1")
+        text = text.replace("TWO","2")
+        text = text.replace("THREE","3")
+        text = text.replace("FOUR","4")
+        text = text.replace("FIVE","5")
+        text = text.replace("SIX","6")
+        text = text.replace("SEVEN","7")
+        text = text.replace("EIGHT","8")
+        text = text.replace("NINE","9")
+        text = text.replace("ZERO","0")
+        return text
+
+    #number is a string
+    #twilio creds is a tuple (auth_id,auth_key)
+    def _verify_phone_number(self,number):
+        #I know this worked at some point...test this on other computer
+        data = pickle.load(open("twilio.creds","r"))
+        r = requests.get("http://lookups.twilio.com/v1/PhoneNumbers/"+number,auth=data)
+        if "status_code" in json.loads(r.content).keys():
+            return False
+        else:
+            return True
+        
+    #values is a dictionary
+    def phone_number_parse(self,values):
+        phone_numbers = []
+        text = self._letter_to_number(values["text_body"])
+        phone = []
+        counter = 0
+        found = False
+        possible_numbers = []
+        for ind,letter in enumerate(text):
+            if letter.isdigit():
+                phone.append(letter)
+                found = True
+            else:
+                if found:
+                    counter += 1
+                if counter > 15 and found:
+                    phone = []
+                    counter = 0
+                    found = False
+	    #country codes can be two,three digits
+            if len(phone) == 10 and phone[0] != '1':
+                possible_numbers.append(''.join(phone))
+                phone = phone[1:]
+            if len(phone) == 11 and phone[0] == '1':
+                possible_numbers.append(''.join(phone))
+                phone = phone[1:]
+        for number in possible_numbers:
+            if self._verify_phone_number(number):
+                phone_numbers.append(number)
+        return phone_numbers
+
+class ParseAddress:
+    #If we are pulling this information from an excel document then we'll likely have the address information in an acceptable form
+    #Otherwise we'll need to run the text through usaddress or streetaddress
+    def __init__(self,from_api=False,from_excel=False):
+        self.from_api = from_api
+        self.from_excel = from_excel
+    #remove near, split on commas, 
+    #tag - div style="padding-left:2em;
+    def preprocess(self,text):
+        #this case is included because usaddress doesn't do a great job if there isn't a number at parsing semantic information
+        #However if there is a number it tends to be better than streetaddress
+        #Therefore usaddress is better at figuring out where the start of an address is, in say a very long body of text with an address in there at some point
+        #It isn't that great at approximate locations
+        if any([elem.isdigit() for elem in text.split(" ")]):
+            addr = usaddress.parse(text)
+            addr = [elem for elem in addr if elem[1] != 'Recipient']
+            addr_dict = {}
+            for value,key in addr:
+                addr_dict[key] = value
+            return addr_dict
+        else:
+            possible_streets = []
+            for word,tag in tagger.tag(text.split()):
+                if tag == 'LOCATION':
+                    possible_streets.append(word)
+            parts = nltk.pos_tag(nltk.word_tokenize(text))
+            for part in parts:
+                
+            #Here I need to add Part of Speech tagging and pull out all the nouns as possible street names.
+            #Then I need to come up with a list of street names in NYC and run each noun through the list
+            #From there I'll have all the street names
+            
+
+    def process_address(self,addr):
+        house_number = addr["house number"].split(" ")[0].split("/")[0].replace("'","")
+        if house_number.isalpha():
+            return "two cross streets"
+        street_name = addr["street name"]
+    
+        street = ""
+        for name in street_name.split(" "):
+            if name == "nd" or name == "st" or name == "th":
+                continue
+            if name.isdigit():
+                number = append_ending(name)
+                street += number+ " "
+            else:
+                street += name.title() + " "
+        if addr.get("boro"):
+            return house_number + " " + street + addr["boro"] + " NYC"
+        else:
+            return house_number + " " + street + "NYC"
+

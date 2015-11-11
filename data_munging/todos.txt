@@ -1,0 +1,9 @@
+I'm going to figure out the cities that each census block is in and then create a geo-bounding box for the cities with over 25K people in New York State.
+
+I'm going to do this by:
+
+1) reading in the census zip code data
+2) Matching the zip code data to the city it belongs to
+3) matching the census block from the zip code to the city
+4) creating a dataset with the city label on each census block
+

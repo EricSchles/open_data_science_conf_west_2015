@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/font-awesome.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+        <title>Index</title>
+</head>
+<body>
+
+<div class="row">
+<div class="list-group">
+  <a class="list-group-item" href="{{ url_for('gis_map') }}"><i class="fa fa-map fa-fw"></i>&nbsp; Map Of Data</a>
+  <a class="list-group-item" href="{{ url_for('timeseries') }}"><i class="fa fa-line-chart fa-fw"></i>&nbsp; Timeseries Of Data</a>
+  <a class="list-group-item" href="{{ url_for('pie') }}"><i class="fa fa-pie-chart fa-fw"></i>&nbsp; Pie Charts Of Data</a>
+  <a class="list-group-item" href="{{ url_for('bar') }}"><i class="fa fa-bar-chart fa-fw"></i>&nbsp; Bar Charts Of Data</a>
+  <a class="list-group-item" href="{{ url_for('webscraping')}}"><i class="fa fa-magic fa-fw"></i>&nbsp; Web Scraping</a>
+</div>
+</div>
+
+<script src="{{url_for('static',filename='js/jquery.js')}}"></script>
+
+</body>
+</html>
