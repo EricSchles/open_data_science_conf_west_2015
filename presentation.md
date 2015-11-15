@@ -10,6 +10,12 @@ __Eric__ __Schles__
 * Currently work for the United States Digital Service as a Data Scientist working on Veterans Affairs
 * Still working as a researcher in Human Trafficking in my spare time 
 
+##Connect
+
+hackingagainstslavery@gmail.com
+ericschles@gmail.com
+@EricSchles
+
 ##About my org
 
 Hacking Against Slavery

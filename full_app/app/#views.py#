@@ -110,7 +110,7 @@ month_to_num = {
 
 @app.route("/timeseries",methods=["GET","POST"])
 def timeseries():
-    #investigations = InvestigationLogger().query.all()
+    #.investigations = InvestigationLogger().query.all()
     df = pd.DataFrame().from_csv("homeless_data.csv")
     year = [str(elem) for elem in df["year"].tolist()]
     month = [month_to_num[elem] for elem in df["month"].tolist()]
