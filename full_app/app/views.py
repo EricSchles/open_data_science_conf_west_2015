@@ -4,6 +4,7 @@ import pickle
 from crawler import Scraper
 from multiprocessing import Process
 
+
 #This basic server will send data to the leaflet frontend
 from random import randint
 import json 
@@ -13,7 +14,7 @@ import os
 from werkzeug import secure_filename
 from glob import glob
 from tools import Queue
-
+from central_server import InvestigationLogger
 
 scraper = Scraper()
 queue = Queue()
@@ -109,6 +110,7 @@ month_to_num = {
 
 @app.route("/timeseries",methods=["GET","POST"])
 def timeseries():
+    investigations = InvestigationLogger().query.all()
     df = pd.DataFrame().from_csv("homeless_data.csv")
     year = [str(elem) for elem in df["year"].tolist()]
     month = [month_to_num[elem] for elem in df["month"].tolist()]
@@ -123,7 +125,9 @@ def timeseries():
                            total_families=json.dumps(["total_families"]+df["total_families"].tolist()),
                            total_persons_in_families=json.dumps(["total_persons_in_families"]+df["total_persons_in_families"].tolist()),
                            total_population=json.dumps(["total_population"]+df["total_population"].tolist()),
-                           dates=json.dumps(["dates"] +dates))
+                           dates=json.dumps(["dates"] +dates)#,
+                           #investigations = json.dumps(["investigations"] 
+    )
 
 @app.route("/bar",methods=["GET","POST"])
 def bar():

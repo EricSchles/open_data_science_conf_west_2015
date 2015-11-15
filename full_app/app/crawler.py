@@ -14,8 +14,11 @@ from tools import * #ParsePhoneNumber, ParseAddress
 try:
     from app import db
 except ImportError:
+    from app import app
+    from flask.ext.sqlalchemy import SQLAlchemy
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db" #os.environ["DATABASE_URL"]
     db = SQLAlchemy(app)
+
 
 phone_parser = ParsePhoneNumber()
 addr_parser = ParseAddress()
