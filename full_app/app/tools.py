@@ -13,7 +13,7 @@ from geopy.geocoders import GoogleV3,Nominatim
 import nltk
 import geopy
 
-tagger = Tagger('/opt/stanford-postagger-full-2014-08-27/classifiers/english.all.3class.distsim.crf.ser.gz','/opt/stanford-postagger-full-2014-08-27/stanford-postagger-3.4.1.jar')
+tagger = Tagger('/opt/stanford-ner-2014-08-27/classifiers/english.all.3class.distsim.crf.ser.gz','/opt/stanford-ner-2014-08-27/stanford-ner-3.4.1.jar')
 
 addr_formatter = StreetAddressFormatter()
 
