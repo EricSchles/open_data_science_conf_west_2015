@@ -136,7 +136,7 @@ class ParseAddress:
             try:
                 lat_long = g_coder.geocode(cross_addr)
                 return lat_long
-            except geopy.geocoders.googlev3.GeocoderQueryError:
+            except:
                 return None
         
     #remove near, split on commas, 
